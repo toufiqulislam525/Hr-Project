@@ -255,7 +255,7 @@ def attendence_sheet_generator():
     return attendence_sheet_result
 
 
-def attendence_sheet_generator2():
+def attendence_sheet_generator_weekly():
     sql = "select check_in from attendence order by year Desc, month Desc, day Desc"
     values = False
     attendence_sheet = db_query(sql, values)
@@ -275,7 +275,6 @@ def attendence_sheet_generator2():
             ind_date = (y, w)
             ind_date_list.append(ind_date)
 
-    print(ind_date_list)
     # Weekly Attendence
     weekly_present = {}
     for ind_date in ind_date_list:
@@ -296,4 +295,10 @@ def attendence_sheet_generator2():
 def get_attendancereport_daily():
     attendence_sheet = attendence_sheet_generator()
     attendence_sheet = r_d_4(attendence_sheet)
+    return attendence_sheet
+
+
+@app.get("/attendancereport/weekly")
+def get_attendancereport_weekly():
+    attendence_sheet = attendence_sheet_generator_weekly()
     return attendence_sheet
