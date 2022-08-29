@@ -167,6 +167,7 @@ def remove_check_in(id):
 
 
 # API : POST checkout
+# Input Format for Post method is Check which is predefined and same as checkin
 @app.post("/checkout")
 def check_out(checkout: Check):
     id = checkout.id
