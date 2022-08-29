@@ -175,7 +175,7 @@ Example Input value:
 ```
 Output:
 
-This Post method returns new entry in attendence with checkin and checkout value
+This Post method returns new entry in attendence with checkin and checkout values
 
 ```sh
 [
@@ -211,7 +211,7 @@ URL :
 ```
 Output : 
 
-Output will be in the format of for every year-week there will be a list of ids with corresponding attendance value
+Output will be in the format of for every year-week there will be a list of ids with corresponding attendance values
 ```sh 
 {
   "2022-35": {
@@ -227,7 +227,7 @@ URL :
 ```
 Output : 
 
-Output will be in the format of for every year-month there will be a list of ids with corresponding attendance value
+Output will be in the format of for every year-month there will be a list of ids with corresponding attendance values
 ```sh 
 {
   "2022-8": {
