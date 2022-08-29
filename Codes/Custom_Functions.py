@@ -21,3 +21,13 @@ def response_dictionary_2(data):
         dict['time'] = i[1]
         l.append(dict)
     return l
+
+
+# Converts string to datetime format
+def time_filter(time):
+    result = ""
+    for char in time:
+        if (char == '.'):
+            return result
+        result += char
+    return result
