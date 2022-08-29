@@ -369,6 +369,13 @@ def check(id):
 @app.post("/applyforleave")
 def apply_for_leave_req(rq: leave_request):
     id = rq.id
+    time_difference = rq.end_date - rq.start_date
+    time_difference_in_days = time_difference.days
+    print(time_difference)
+    if (time_difference_in_days <= 0):
+        raise HTTPException(
+            status_code=404, detail="Invalid Start and end time")
+
     # Taking Start and End Date Excluding Hour,min,second
     start_date = time_filter(str(rq.start_date))
     start_date = datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
@@ -390,7 +397,16 @@ def apply_for_leave_req(rq: leave_request):
             flag = check(id)
             if (flag):
                 # Add Leave Request
-                pass
+                sql = "Insert into leave_request values(?,?,?,?)"
+                values = (id, start_date, end_date, 0)
+                db_query(sql, values)
+
+                # Show Current Leave Request
+                sql = "Select * from leave_request where id = ?"
+                values = (id,)
+                leave_request = db_query(sql, values)
+                leave_request = r_d_5(leave_request)
+                return leave_request
 
             else:
                 raise HTTPException(
