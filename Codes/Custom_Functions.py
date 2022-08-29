@@ -40,9 +40,17 @@ def response_dictionary_3(data):
         l.append(dict)
     return l
 
+
+def attendence_sheet_result_formatter(data):
+    dict = {}
+    for i in data:
+        date = i[1]
+        ids = i[2]
+        dict[date] = ids
+    return dict
+
+
 # Converts string to datetime format
-
-
 def time_filter(time):
     result = ""
     for char in time:
