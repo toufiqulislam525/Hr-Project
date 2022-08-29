@@ -140,3 +140,29 @@ def check_in(checkin: Check):
     else:
         raise HTTPException(
             status_code=404, detail="Requested User Id is not in the Database")
+
+
+# API : POST checkout
+# Input Format for Post method is Check which is predefined and same as checkin
+@app.post("/checkout")
+def check_out(checkout: Check):
+    id = checkout.id
+    sql = "Select * from users where id = ?"
+    values = (id,)
+    user = db_query(sql, values)
+    user = r_d(user)
+
+    # check if requested user_id is in the database
+    if (user):
+        # query for checking if user is checked in or not
+        sql = 'select * from check_in_out where id = ?'
+        values = (id,)
+        user = db_query(sql, values)
+        # r_d_2 formats the data to json dictionary of check_in_out format
+        user = r_d_2(user)
+
+        # check if requested is checked in or not
+        if user:
+            checkout_time = str(datetime.now())
+            checkout_time = time_filter(checkout_time)  # filtered current time
+            checkin_time = user[0]['time']
