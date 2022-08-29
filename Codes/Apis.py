@@ -255,6 +255,43 @@ def attendence_sheet_generator():
     return attendence_sheet_result
 
 
+def attendence_sheet_generator2():
+    sql = "select check_in from attendence order by year Desc, month Desc, day Desc"
+    values = False
+    attendence_sheet = db_query(sql, values)
+
+    date_list = []
+    ind_date_list = []
+    for check_in in attendence_sheet:
+        t = datetime.strptime(check_in[0], "%Y-%m-%d %H:%M:%S")
+        y = t.year
+        m = t.month
+        d = t.day
+        date = datetime.date(t)
+        w = date.strftime("%V")  # Week
+
+        if str(date) not in date_list:
+            date_list.append(str(date))
+            ind_date = (y, w)
+            ind_date_list.append(ind_date)
+
+    print(ind_date_list)
+    # Weekly Attendence
+    weekly_present = {}
+    for ind_date in ind_date_list:
+        date = str(ind_date[0])
+        date = date + "-" + ind_date[1]
+        sql = "select id from attendence where year = ? and week= ?"
+        values = ind_date
+        ids = db_query(sql, values)
+        count_present = {}
+        for id in ids:
+            x = id[0]
+            count_present[x] = count_present.get(x, 0) + 1
+        weekly_present[date] = count_present
+    return weekly_present
+
+
 @app.get("/attendancereport/daily")
 def get_attendancereport_daily():
     attendence_sheet = attendence_sheet_generator()
