@@ -311,7 +311,7 @@ def attendence_sheet_generator_monthly():
             ind_date = (y, m)
             ind_date_list.append(ind_date)
 
-    # Weekly Attendence
+    # Monthly Attendence
     monthly_present = {}
     for ind_date in ind_date_list:
         date = str(ind_date[0])
@@ -338,4 +338,10 @@ def get_attendancereport_daily():
 @app.get("/attendancereport/weekly")
 def get_attendancereport_weekly():
     attendence_sheet = attendence_sheet_generator_weekly()
+    return attendence_sheet
+
+
+@app.get("/attendancereport/monthly")
+def get_attendancereport_monthly():
+    attendence_sheet = attendence_sheet_generator_monthly()
     return attendence_sheet
