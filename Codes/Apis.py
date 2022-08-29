@@ -320,7 +320,7 @@ def attendence_sheet_generator_monthly():
             x = id[0]
             count_present[x] = count_present.get(x, 0) + 1
         monthly_present[date] = count_present
-    print(monthly_present)
+
     return monthly_present
 
 
