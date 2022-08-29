@@ -220,7 +220,7 @@ def check_out(checkout: Check):
 
 # API : GET attendancereport/daily
 
-def attendence_sheet_generator():
+def attendence_sheet_generator_daily():
     sql = "select check_in from attendence order by year Desc, month Desc, day Desc"
     values = False
     attendence_sheet = db_query(sql, values)
@@ -265,8 +265,6 @@ def attendence_sheet_generator_weekly():
     for check_in in attendence_sheet:
         t = datetime.strptime(check_in[0], "%Y-%m-%d %H:%M:%S")
         y = t.year
-        m = t.month
-        d = t.day
         date = datetime.date(t)
         w = date.strftime("%V")  # Week
 
@@ -302,9 +300,7 @@ def attendence_sheet_generator_monthly():
         t = datetime.strptime(check_in[0], "%Y-%m-%d %H:%M:%S")
         y = t.year
         m = t.month
-        d = t.day
         date = datetime.date(t)
-        w = date.strftime("%V")  # Week
 
         if str(date) not in date_list:
             date_list.append(str(date))
@@ -328,19 +324,22 @@ def attendence_sheet_generator_monthly():
     return monthly_present
 
 
+# API : GET attendancereport/daily
 @app.get("/attendancereport/daily")
 def get_attendancereport_daily():
-    attendence_sheet = attendence_sheet_generator()
+    attendence_sheet = attendence_sheet_generator_daily()
     attendence_sheet = r_d_4(attendence_sheet)
     return attendence_sheet
 
 
+# API : GET attendancereport/weekly
 @app.get("/attendancereport/weekly")
 def get_attendancereport_weekly():
     attendence_sheet = attendence_sheet_generator_weekly()
     return attendence_sheet
 
 
+# API : GET attendancereport/monthly
 @app.get("/attendancereport/monthly")
 def get_attendancereport_monthly():
     attendence_sheet = attendence_sheet_generator_monthly()
