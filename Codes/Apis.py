@@ -349,7 +349,7 @@ def get_attendancereport_monthly():
 
 # API : POST applyforleave
 
-# Input Format for Post method is Check which is predefined and same as checkin
+# Input Format for Post method is leave_request
 class leave_request(BaseModel):
     id: int
     start_date: datetime
@@ -366,6 +366,7 @@ def check(id):
         return False
 
 
+# API : POST applyforleave
 @app.post("/applyforleave")
 def apply_for_leave_req(rq: leave_request):
     id = rq.id
@@ -417,3 +418,9 @@ def apply_for_leave_req(rq: leave_request):
     else:
         raise HTTPException(
             status_code=404, detail="Provided id is not in the database")
+
+
+# API : POST processleaverequest
+@app.post("/applyforleave")
+def apply_for_leave_req(rq: leave_request):
+    pass
