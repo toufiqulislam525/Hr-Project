@@ -89,3 +89,16 @@ def post_add_user(user: User):
         db_query(sql, values)
         # Return All employees with the new employee added
         return get_users()
+
+
+# API : POST checkin
+
+# Input Format for Post method
+class Check(BaseModel):
+    id: int
+
+
+# API : POST checkin
+@app.post("/checkin")
+def check_in(checkin: Check):
+    id = checkin.id
