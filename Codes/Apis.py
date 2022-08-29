@@ -18,5 +18,21 @@ def get_users():
     users = db_query(sql, values)
 
     users = r_d(users)
-    # r_d function take users list and converts to api output format(json)
+    # r_d function take users list and converts it to api output format(json)
     return users
+
+
+# API : GET users/{userid}
+@app.get("/users/{userid}")
+def get_user_by_id(userid: int):
+    id = userid
+    sql = "Select * from users where id=?"
+    values = (id,)
+    users = db_query(sql, values)
+
+    # r_d function take users list and converts it to api output format(json)
+    user = r_d(users)
+    if user:
+        return user
+    else:
+        raise HTTPException(status_code=404, detail="Id not in database")
