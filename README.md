@@ -26,3 +26,10 @@ These Functionalities are managed by different REST API endpoints.
 2. check_in_out(id,time)
 3. attendence(id,check_in,check_out,day,week,month,year)
 4. leave_request(id,start_date,end_date,approved)
+
+# Enviroment Setup
+## Dependencies
+1. FastAPI
+2. SQLite
+
+## Setup
