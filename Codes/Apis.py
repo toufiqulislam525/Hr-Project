@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Custom Functions
 from Database_Handler import db_query
-from Custom_Functions import response_dictionary as r_d, response_dictionary_2 as r_d_2
+from Custom_Functions import response_dictionary as r_d, response_dictionary_2 as r_d_2, response_dictionary_3 as r_d_3
 from Custom_Functions import time_filter
 
 
@@ -195,3 +195,19 @@ def check_out(checkout: Check):
 
             # Remove data from check_in_out table as employee checked out
             remove_check_in(id)
+
+            # Return The Attendence table data as response
+            sql = "select * from attendence where id = ? and check_in = ?"
+            values = (id, checkin_time)
+            attendence = db_query(sql, values)
+            # r_d_3 formats the data to json dictionary of Attendece format
+            attendence = r_d_3(attendence)
+            return attendence
+
+        else:
+            raise HTTPException(
+                status_code=404, detail="User is not Checked In")
+
+    else:
+        raise HTTPException(
+            status_code=404, detail="Provided User Id is not in the Database")
