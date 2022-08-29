@@ -421,6 +421,12 @@ def apply_for_leave_req(rq: leave_request):
 
 
 # API : POST processleaverequest
-@app.post("/applyforleave")
-def apply_for_leave_req(rq: leave_request):
+# Input Format for Post method is process_request
+class process_request(BaseModel):
+    id: int
+    process: int
+
+
+@app.post("/processleaverequest")
+def process_leave_request(rq: process_request):
     pass
