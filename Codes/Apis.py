@@ -16,5 +16,7 @@ def get_users():
     sql = "Select * from users"
     values = False
     users = db_query(sql, values)
+
     users = r_d(users)
+    # r_d function take users list and converts to api output format(json)
     return users
