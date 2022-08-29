@@ -257,7 +257,6 @@ def attendence_sheet_generator():
 
 @app.get("/attendancereport/daily")
 def get_attendancereport_daily():
-    pass
-
-
-attendence_sheet_generator()
+    attendence_sheet = attendence_sheet_generator()
+    attendence_sheet = r_d_4(attendence_sheet)
+    return attendence_sheet
