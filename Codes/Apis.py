@@ -1,5 +1,6 @@
 # Library Import
 from select import select
+from urllib import request
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from datetime import date, datetime
@@ -423,10 +424,41 @@ def apply_for_leave_req(rq: leave_request):
 # API : POST processleaverequest
 # Input Format for Post method is process_request
 class process_request(BaseModel):
+    m_id: int
     id: int
     process: int
 
 
+# API : POST processleaverequest
 @app.post("/processleaverequest")
 def process_leave_request(rq: process_request):
-    pass
+    m_id = rq.m_id
+    id = rq.id
+    process = rq.process
+
+    # check if requested id is manager
+    sql = "select * from users where id = ?"
+    values = (m_id,)
+    users = db_query(sql, values)
+    user = r_d(users)
+    if user:
+        role = user[0]['role']
+        if (role == 'manager'):
+            # Process Request
+            sql = "Update leave_request Set approved =? where id =? and approved=0"
+            values = (process, id)
+            db_query(sql, values)
+
+            # show all requests
+            sql = "select * from leave_request"
+            values = False
+            leave_requests = db_query(sql, values)
+            leave_requests = r_d_5(leave_requests)
+            return leave_requests
+        else:
+            raise HTTPException(
+                status_code=404, detail="Provided id is not manager")
+
+    else:
+        raise HTTPException(
+            status_code=404, detail="Provided id is not in the database")
