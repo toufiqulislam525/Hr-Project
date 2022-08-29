@@ -11,6 +11,7 @@ from Custom_Functions import response_dictionary as r_d
 app = FastAPI()
 
 
+# API : GET users
 @app.get("/users")
 def get_users():
     sql = "Select * from users"
