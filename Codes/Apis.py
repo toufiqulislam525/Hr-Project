@@ -146,7 +146,7 @@ def check_in(checkin: Check):
 # Input Format for Post method is Check which is predefined and same as checkin
 
 
-# Function For API : POST checkout
+# Functions For API : POST checkout
 def add_to_attendence(id, checkin_time, checkout_time):
     t = datetime.strptime(checkin_time, "%Y-%m-%d %H:%M:%S")
     day = t.day
@@ -160,6 +160,13 @@ def add_to_attendence(id, checkin_time, checkout_time):
     db_query(sql, values)
 
 
+def remove_check_in(id):
+    sql = 'DELETE FROM check_in_out WHERE id=?'
+    values = (id,)
+    db_query(sql, values)
+
+
+# API : POST checkout
 @app.post("/checkout")
 def check_out(checkout: Check):
     id = checkout.id
@@ -185,3 +192,6 @@ def check_out(checkout: Check):
 
             # Insert Checkin and checkout time in attendence table
             add_to_attendence(id, checkin_time, checkout_time)
+
+            # Remove data from check_in_out table as employee checked out
+            remove_check_in(id)
