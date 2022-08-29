@@ -6,6 +6,7 @@ from datetime import datetime
 # Custom Functions
 from Database_Handler import db_query
 from Custom_Functions import response_dictionary as r_d, response_dictionary_2 as r_d_2
+from Custom_Functions import time_filter
 
 
 app = FastAPI()
@@ -124,3 +125,18 @@ def check_in(checkin: Check):
             # Insert id and current time to check_in_out table
             sql = 'Insert into check_in_out values(?,?)'
             time = str(datetime.now())
+            time = time_filter(time)
+            values = (id, time)
+            db_query(sql, values)
+
+            # Show the current entry in check_in_out table
+            sql = 'select * from check_in_out where id=?'
+            values = (id,)
+            check_in = db_query(sql, values)
+            check_in = r_d_2(check_in)  # convert data to json format
+
+            return check_in
+
+    else:
+        raise HTTPException(
+            status_code=404, detail="Requested User Id is not in the Database")
