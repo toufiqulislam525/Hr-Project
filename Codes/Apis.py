@@ -3,9 +3,11 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from datetime import datetime
 
+
 # Custom Functions
 from Database_Handler import db_query
 from Custom_Functions import response_dictionary as r_d, response_dictionary_2 as r_d_2, response_dictionary_3 as r_d_3
+from Custom_Functions import attendence_sheet_result_formatter as r_d_4
 from Custom_Functions import time_filter
 
 
@@ -212,3 +214,50 @@ def check_out(checkout: Check):
     else:
         raise HTTPException(
             status_code=404, detail="Provided User Id is not in the Database")
+
+
+# API : GET attendancereport
+
+# API : GET attendancereport/daily
+
+def attendence_sheet_generator():
+    sql = "select check_in from attendence order by year Desc, month Desc, day Desc"
+    values = False
+    attendence_sheet = db_query(sql, values)
+
+    date_list = []
+    ind_date_list = []
+    for check_in in attendence_sheet:
+        t = datetime.strptime(check_in[0], "%Y-%m-%d %H:%M:%S")
+        y = t.year
+        m = t.month
+        d = t.day
+        date = datetime.date(t)
+
+        if str(date) not in date_list:
+            date_list.append(str(date))
+            ind_date = (y, m, d)
+            ind_date_list.append(ind_date)
+
+    # daily Attendence
+    ids_list = []
+    for ind_date in ind_date_list:
+        sql = "select id from attendence where year = ? and month =? and day = ?"
+        values = ind_date
+        ids = db_query(sql, values)
+        temp = []
+        for id in ids:
+            if (id[0] not in temp):
+                temp.append(id[0])
+        ids_list.append(temp)
+
+    attendence_sheet_result = list(zip(ind_date_list, date_list, ids_list))
+    return attendence_sheet_result
+
+
+@app.get("/attendancereport/daily")
+def get_attendancereport_daily():
+    pass
+
+
+attendence_sheet_generator()
