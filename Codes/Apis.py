@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Custom Functions
 from Database_Handler import db_query
-from Custom_Functions import response_dictionary as r_d
+from Custom_Functions import response_dictionary as r_d, response_dictionary_2 as r_d_2
 
 
 app = FastAPI()
@@ -102,3 +102,25 @@ class Check(BaseModel):
 @app.post("/checkin")
 def check_in(checkin: Check):
     id = checkin.id
+    sql = "select * from users where id=?"
+    values = (id,)
+    user = db_query(sql, values)
+    user = r_d(user)
+
+    # check if requested user_id is in the database
+    if (user):
+        sql = 'select * from check_in_out where id = ?'
+        values = (id,)
+        user = db_query(sql, values)
+
+        # r_d_2 formats the data to json dictionary of check_in_out format
+        user = r_d_2(user)
+
+        # check if requested user is already checked in
+        if user:
+            raise HTTPException(
+                status_code=404, detail="Already Checked In")
+        else:
+            # Insert id and current time to check_in_out table
+            sql = 'Insert into check_in_out values(?,?)'
+            time = str(datetime.now())
