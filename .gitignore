@@ -1,2 +1,4 @@
 *.db
 test.py
+Pipfile
+Pipfile.lock
