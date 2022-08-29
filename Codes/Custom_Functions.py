@@ -68,8 +68,10 @@ def leave_request_formatter(data):
         dict['start_date'] = i[1]
         dict['end_date'] = i[2]
         if (i[3] == 0):
-            dict['Approved'] = False
-        else:
-            dict['Approved'] = True
+            dict['Approved'] = "Pending"
+        elif i[3] > 0:
+            dict['Approved'] = "Approved"
+        elif i[3] < 0:
+            dict['Approved'] = "Denied"
         l.append(dict)
     return l
