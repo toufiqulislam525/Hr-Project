@@ -1,13 +1,14 @@
 # Library Import
+from select import select
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date, datetime
 
 
 # Custom Functions
 from Database_Handler import db_query
 from Custom_Functions import response_dictionary as r_d, response_dictionary_2 as r_d_2, response_dictionary_3 as r_d_3
-from Custom_Functions import attendence_sheet_result_formatter as r_d_4
+from Custom_Functions import attendence_sheet_result_formatter as r_d_4, leave_request_formatter as r_d_5
 from Custom_Functions import time_filter
 
 
@@ -344,3 +345,59 @@ def get_attendancereport_weekly():
 def get_attendancereport_monthly():
     attendence_sheet = attendence_sheet_generator_monthly()
     return attendence_sheet
+
+
+# API : POST applyforleave
+
+# Input Format for Post method is Check which is predefined and same as checkin
+class leave_request(BaseModel):
+    id: int
+    start_date: datetime
+    end_date: datetime
+
+
+def check(id):
+    sql = "Select * from leave_request where id = ? and approved = 0"
+    values = (id,)
+    result = db_query(sql, values)
+    if not result:
+        return True
+    else:
+        return False
+
+
+@app.post("/applyforleave")
+def apply_for_leave_req(rq: leave_request):
+    id = rq.id
+    # Taking Start and End Date Excluding Hour,min,second
+    start_date = time_filter(str(rq.start_date))
+    start_date = datetime.strptime(start_date, "%Y-%m-%d %H:%M:%S")
+    start_date = datetime.date(start_date)
+
+    end_date = time_filter(str(rq.end_date))
+    end_date = datetime.strptime(end_date, "%Y-%m-%d %H:%M:%S")
+    end_date = datetime.date(end_date)
+
+    # check if given id is in the database and if user's role is employee
+    sql = "select * from users where id = ?"
+    values = (id,)
+    users = db_query(sql, values)
+    user = r_d(users)
+    if user:
+        role = user[0]['role']
+        if (role == 'employee'):
+            # Check for pending request
+            flag = check(id)
+            if (flag):
+                # Add Leave Request
+                pass
+
+            else:
+                raise HTTPException(
+                    status_code=404, detail="Previous Leave Request Pending")
+        else:
+            raise HTTPException(
+                status_code=404, detail="Role of provided id is not employee")
+    else:
+        raise HTTPException(
+            status_code=404, detail="Provided id is not in the database")
