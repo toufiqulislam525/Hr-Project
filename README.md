@@ -192,7 +192,7 @@ This Post method returns new entry in attendence with checkin and checkout value
 ```
 ### GET attendancereport/daily
 URL : 
-```
+```sh
 /attendancereport/daily
 ```
 Output : 
@@ -206,12 +206,12 @@ Output :
 ```
 ### GET attendancereport/weekly
 URL : 
-```
+```sh
 /attendancereport/weekly
 ```
 Output : 
 
-Output will be in the format of every week with every id and number of attendance of that id in that month
+Output will be in the format of for every year-week there will be a list of ids with corresponding attendance value
 ```sh 
 {
   "2022-35": {
@@ -222,18 +222,73 @@ Output will be in the format of every week with every id and number of attendanc
 
 ### GET attendancereport/monthly
 URL : 
-```
+```sh
 /attendancereport/monthly
 ```
 Output : 
 
-Output will be in the format of every month with every id and number of attendance of that id in that month
+Output will be in the format of for every year-month there will be a list of ids with corresponding attendance value
 ```sh 
 {
-  "2022-35": {
+  "2022-8": {
     "2": 1
   }
 }
 ```
 
+### POST applyforleave 
+URL :
+```sh
+/applyforleave
+```
+Example Input value:
+```sh
+{
+  "id": 2,
+  "start_date": "2022-09-29T12:59:54.684Z",
+  "end_date": "2022-10-25T12:59:54.684Z"
+}
+```
 
+Output :
+
+Output will be the Leave Request which is created
+```sh
+[
+  {
+    "id": 2,
+    "start_date": "2022-09-29",
+    "end_date": "2022-10-25",
+    "Approved": "Pending"
+  }
+]
+```
+
+### POST processleaverequest
+URL : 
+```sh
+/processleaverequest
+```
+Example Input value:
+
+process value -1 represents deny, process value 1 represents approve
+```sh
+{
+  "m_id": 1,
+  "id": 2,
+  "process": -1
+}
+```
+Output:
+
+Output will be the Leave Request which has been processed
+```sh
+[
+  {
+    "id": 2,
+    "start_date": "2022-09-29",
+    "end_date": "2022-10-25",
+    "Approved": "Denied"
+  }
+]
+```
