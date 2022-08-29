@@ -8,7 +8,7 @@ This project is a HR system called “HR Hero”. It stores the data of users in
 5. Managers can process leave requests(Approve Or Deny)
 
 These Functionalities are managed by different REST API endpoints.
-## Api Endpoints
+## REST Api Endpoints
 1.  GET users
 2.  GET users/{userid}
 3.  POST adduser (only manager can do this)
