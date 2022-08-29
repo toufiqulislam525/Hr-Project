@@ -22,8 +22,27 @@ def response_dictionary_2(data):
         l.append(dict)
     return l
 
+# Dictionary format  -- attendence(id,check_in,check_out,day,week,month,year)
+# [{"id" : data[0],"check_in" : data[1],"check_out" : data[2],"day" : data[3]......}]
+
+
+def response_dictionary_3(data):
+    l = []
+    for i in data:
+        dict = {}
+        dict['id'] = i[0]
+        dict['check_in'] = i[1]
+        dict['check_out'] = i[2]
+        dict['day'] = i[3]
+        dict['week'] = i[4]
+        dict['month'] = i[5]
+        dict['year'] = i[6]
+        l.append(dict)
+    return l
 
 # Converts string to datetime format
+
+
 def time_filter(time):
     result = ""
     for char in time:
