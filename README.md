@@ -53,7 +53,7 @@ pipenv  install fastapi
 
 ## APIs :
 ###  GET users
-Input : 
+URL : 
 ```
 /users
 ```
@@ -79,7 +79,7 @@ Output :
 ```
 
 ###  GET users/{userid}
-Input:
+URL:
 ```sh
 /users/1
 ```
@@ -156,12 +156,84 @@ This Post method returns newly created checkin entry
 [
   {
     "id": 2,
-    "time": "2022-08-29 18:36:36"
+    "time": "2022-08-29 18:45:31"
   }
 ]
 ```
 
 
 ### POST checkout
+URL :
+```sh
+/checkout
+```
+Example Input value:
+```sh
+{
+  "id": 2
+}
+```
+Output:
+
+This Post method returns new entry in attendence with checkin and checkout value
+
+```sh
+[
+  {
+    "id": 2,
+    "check_in": "2022-08-29 18:45:31",
+    "check_out": "2022-08-29 18:46:00",
+    "day": 29,
+    "week": 35,
+    "month": 8,
+    "year": 2022
+  }
+]
+```
+### GET attendancereport/daily
+URL : 
+```
+/attendancereport/daily
+```
+Output : 
+```sh 
+[
+  {
+    "id": 2,
+    "time": "2022-08-29 18:36:36"
+  }
+]
+```
+### GET attendancereport/weekly
+URL : 
+```
+/attendancereport/weekly
+```
+Output : 
+
+Output will be in the format of every week with every id and number of attendance of that id in that month
+```sh 
+{
+  "2022-35": {
+    "2": 1
+  }
+}
+```
+
+### GET attendancereport/monthly
+URL : 
+```
+/attendancereport/monthly
+```
+Output : 
+
+Output will be in the format of every month with every id and number of attendance of that id in that month
+```sh 
+{
+  "2022-35": {
+    "2": 1
+  }
+}
+```
 
 
