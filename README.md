@@ -196,6 +196,8 @@ URL :
 /attendancereport/daily
 ```
 Output : 
+
+Output will be a list of id's and checkin time
 ```sh 
 [
   {
