@@ -1,5 +1,6 @@
 # Dictionary format -- User(id,name,role)
 #[{"id" : data[0],"name" : data[1], "role": data[2]}]
+#Git something
 def response_dictionary(data):
     l = []
     for i in data:
